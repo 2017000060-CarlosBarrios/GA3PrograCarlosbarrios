@@ -1,0 +1,197 @@
+using System;
+
+namespace ControlInventarioTienda
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Matriz de 10 filas (productos) y 3 columnas:
+            // Columna 0: Código | Columna 1: Nombre | Columna 2: Cantidad
+            string[,] inventario = new string[10, 3];
+
+            // Inicializar la matriz con cadenas vacías o nulas
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    inventario[i, j] = "";
+                }
+            }
+
+            bool salir = false;
+
+            while (!salir)
+            {
+                Console.WriteLine("\n----- MENÚ -----");
+                Console.WriteLine("1. Registrar producto");
+                Console.WriteLine("2. Mostrar productos");
+                Console.WriteLine("3. Actualizar producto");
+                Console.WriteLine("4. Eliminar producto");
+                Console.WriteLine("5. Salir");
+                Console.Write("Seleccione una opción: ");
+
+                string opcion = Console.ReadLine();
+                Console.WriteLine();
+
+                switch (opcion)
+                {
+                    case "1":
+                        RegistrarProducto(inventario);
+                        break;
+                    case "2":
+                        MostrarProductos(inventario);
+                        break;
+                    case "3":
+                        ActualizarProducto(inventario);
+                        break;
+                    case "4":
+                        EliminarProducto(inventario);
+                        break;
+                    case "5":
+                        salir = true;
+                        Console.WriteLine("Saliendo del programa...");
+                        break;
+                    default:
+                        Console.WriteLine("Opción no válida. Intente de nuevo.");
+                        break;
+                }
+            }
+        }
+
+        // 1. Registrar producto en el primer espacio disponible
+        static void RegistrarProducto(string[,] inventario)
+        {
+            bool registrado = false;
+
+            for (int i = 0; i < 10; i++)
+            {
+                // Un espacio está libre si el código (columna 0) está vacío
+                if (string.IsNullOrEmpty(inventario[i, 0]))
+                {
+                    Console.WriteLine($"--- Registrar Producto (Espacio {i + 1} de 10) ---");
+                    Console.Write("Ingrese código del producto: ");
+                    inventario[i, 0] = Console.ReadLine();
+
+                    Console.Write("Ingrese nombre del producto: ");
+                    inventario[i, 1] = Console.ReadLine();
+
+                    Console.Write("Ingrese cantidad en existencia: ");
+                    inventario[i, 2] = Console.ReadLine();
+
+                    Console.WriteLine("¡Producto registrado exitosamente!");
+                    registrado = true;
+                    break; // Salir del bucle tras registrar en el primer espacio disponible
+                }
+            }
+
+            if (!registrado)
+            {
+                Console.WriteLine("Error: El inventario está lleno (máximo 10 productos).");
+            }
+        }
+
+        // 2. Mostrar todos los productos registrados
+        static void MostrarProductos(string[,] inventario)
+        {
+            Console.WriteLine("----------------------------------------------------");
+            Console.WriteLine("LISTA DE PRODUCTOS EN INVENTARIO");
+            Console.WriteLine("----------------------------------------------------");
+
+            bool hayProductos = false;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (!string.IsNullOrEmpty(inventario[i, 0]))
+                {
+                    Console.WriteLine($"Fila {i + 1} | Código: {inventario[i, 0]} | Nombre: {inventario[i, 1]} | Cantidad: {inventario[i, 2]}");
+                    hayProductos = true;
+                }
+            }
+
+            if (!hayProductos)
+            {
+                Console.WriteLine("No hay productos registrados en el inventario.");
+            }
+        }
+
+        // 3. Buscar por código para modificar nombre o cantidad
+        static void ActualizarProducto(string[,] inventario)
+        {
+            Console.Write("Ingrese el código del producto a actualizar: ");
+            string codigoBusqueda = Console.ReadLine();
+
+            int pos = -1;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (inventario[i, 0] == codigoBusqueda)
+                {
+                    pos = i;
+                    break;
+                }
+            }
+
+            if (pos != -1)
+            {
+                Console.WriteLine($"Producto encontrado: {inventario[pos, 1]}");
+                Console.WriteLine("¿Qué desea modificar?");
+                Console.WriteLine("1. Nombre");
+                Console.WriteLine("2. Cantidad");
+                Console.WriteLine("3. Ambos");
+                Console.Write("Opción: ");
+                string subOpcion = Console.ReadLine();
+
+                if (subOpcion == "1" || subOpcion == "3")
+                {
+                    Console.Write("Ingrese nuevo nombre: ");
+                    inventario[pos, 1] = Console.ReadLine();
+                }
+
+                if (subOpcion == "2" || subOpcion == "3")
+                {
+                    Console.Write("Ingrese nueva cantidad: ");
+                    inventario[pos, 2] = Console.ReadLine();
+                }
+
+                Console.WriteLine("¡Producto actualizado correctamente!");
+            }
+            else
+            {
+                Console.WriteLine($"Error: No se encontró ningún producto con el código '{codigoBusqueda}'.");
+            }
+        }
+
+        // 4. Eliminar un producto utilizando su código
+        static void EliminarProducto(string[,] inventario)
+        {
+            Console.Write("Ingrese el código del producto a eliminar: ");
+            string codigoBusqueda = Console.ReadLine();
+
+            int pos = -1;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (inventario[i, 0] == codigoBusqueda)
+                {
+                    pos = i;
+                    break;
+                }
+            }
+
+            if (pos != -1)
+            {
+                // Dejar la posición libre asignando cadenas vacías
+                inventario[pos, 0] = "";
+                inventario[pos, 1] = "";
+                inventario[pos, 2] = "";
+
+                Console.WriteLine("¡Producto eliminado exitosamente!");
+            }
+            else
+            {
+                Console.WriteLine($"Error: No se encontró ningún producto con el código '{codigoBusqueda}'.");
+            }
+        }
+    }
+}
