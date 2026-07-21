@@ -1,0 +1,119 @@
+Algoritmo ParqueoVehiculos
+	// Matriz de 10 filas x 3 columnas
+	// Columna 1: Placa | Columna 2: Propietario | Columna 3: Marca
+	Dimension parqueo[10, 3]
+	// Limpiar la matriz asignando cadenas vacías a cada celda
+	Para i <- 1 Hasta 10 Hacer
+		Para j <- 1 Hasta 3 Hacer
+			parqueo[i, j] <- ""
+		FinPara
+	FinPara
+	Definir opcion Como Entero
+	Definir placaBusqueda, nuevoPropietario, nuevaMarca Como Cadena
+	Definir registrado Como Logico
+	Definir posEncontrada, opcionSub Como Entero
+	Repetir
+		Escribir ""
+		Escribir "----- MENÚ -----"
+		Escribir "1. Registrar vehículo"
+		Escribir "2. Mostrar vehículos"
+		Escribir "3. Actualizar vehículo"
+		Escribir "4. Eliminar vehículo"
+		Escribir "5. Salir"
+		Escribir "Seleccione una opción: " Sin Saltar
+		Leer opcion
+		Escribir ""
+		Según opcion Hacer
+	1:
+		// --- 1. REGISTRAR VEHÍCULO ---
+		registrado <- Falso
+		Para i <- 1 Hasta 10 Hacer
+			Si parqueo[i, 1] = "" Y NO registrado Entonces
+				Escribir "--- Registrar Vehículo (Espacio ", i, " de 10) ---"
+				Escribir "Ingrese número de placa: " Sin Saltar
+				Leer parqueo[i, 1]
+				Escribir "Ingrese nombre del propietario: " Sin Saltar
+				Leer parqueo[i, 2]
+				Escribir "Ingrese marca del vehículo: " Sin Saltar
+				Leer parqueo[i, 3]
+				Escribir "¡Vehículo registrado exitosamente en el espacio ", i, "!"
+				registrado <- Verdadero
+			FinSi
+		FinPara
+		Si NO registrado Entonces
+			Escribir "Error: El parqueo está lleno (máximo 10 vehículos)."
+		FinSi
+	2:
+		// --- 2. MOSTRAR VEHÍCULOS ---
+		Escribir "----------------------------------------------------"
+		Escribir "LISTA DE VEHÍCULOS EN EL PARQUEO"
+		Escribir "----------------------------------------------------"
+		posEncontrada <- 0
+		Para i <- 1 Hasta 10 Hacer
+			Si parqueo[i, 1] <> "" Entonces
+				Escribir "Espacio ", i, " | Placa: ", parqueo[i, 1], " | Propietario: ", parqueo[i, 2], " | Marca: ", parqueo[i, 3]
+				posEncontrada <- posEncontrada + 1
+			FinSi
+		FinPara
+		Si posEncontrada = 0 Entonces
+			Escribir "No hay vehículos registrados en el parqueo."
+		FinSi
+	3:
+		// --- 3. ACTUALIZAR VEHÍCULO ---
+		Escribir "Ingrese el número de placa a buscar: " Sin Saltar
+		Leer placaBusqueda
+		posEncontrada <- 0
+		Para i <- 1 Hasta 10 Hacer
+			Si parqueo[i, 1] = placaBusqueda Entonces
+				posEncontrada <- i
+			FinSi
+		FinPara
+		Si posEncontrada <> 0 Entonces
+			Escribir "Vehículo encontrado en el espacio ", posEncontrada
+			Escribir "¿Qué dato desea actualizar?"
+			Escribir "1. Nombre del propietario"
+			Escribir "2. Marca del vehículo"
+			Escribir "3. Ambos"
+			Escribir "Opción: " Sin Saltar
+			Leer opcionSub
+			Si opcionSub = 1 O opcionSub = 3 Entonces
+				Escribir "Ingrese el nuevo propietario: " Sin Saltar
+				Leer nuevoPropietario
+				parqueo[posEncontrada, 2] <- nuevoPropietario
+			FinSi
+			Si opcionSub = 2 O opcionSub = 3 Entonces
+				Escribir "Ingrese la nueva marca: " Sin Saltar
+				Leer nuevaMarca
+				parqueo[posEncontrada, 3] <- nuevaMarca
+			FinSi
+			Escribir "¡Datos del vehículo actualizados correctamente!"
+		Sino
+			Escribir "Error: No se encontró ningún vehículo con la placa "
+		FinSi
+	4:
+		// --- 4. ELIMINAR VEHÍCULO ---
+		Escribir "Ingrese la placa del vehículo que sale del parqueo: " Sin Saltar
+		Leer placaBusqueda
+		posEncontrada <- 0
+		Para i <- 1 Hasta 10 Hacer
+			Si parqueo[i, 1] = placaBusqueda Entonces
+				posEncontrada <- i
+			FinSi
+		FinPara
+		
+		Si posEncontrada <> 0 Entonces
+			// Liberar la celda asignando texto vacío
+			parqueo[posEncontrada, 1] <- ""
+			parqueo[posEncontrada, 2] <- ""
+			parqueo[posEncontrada, 3] <- ""
+			Escribir "¡El vehículo con placa ", placaBusqueda, " ha salido. Espacio libre!"
+		Sino
+			Escribir "Error: No se encontró ningún vehículo registrado con la placa '
+		FinSi
+	5:
+		Escribir "Saliendo del sistema de parqueo..."
+	De Otro Modo:
+		Escribir "Opción inválida. Seleccione un número entre 1 y 5."
+FinSegún
+	Hasta Que opcion = 5
+FinAlgoritmo
