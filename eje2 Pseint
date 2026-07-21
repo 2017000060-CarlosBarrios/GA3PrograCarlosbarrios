@@ -1,0 +1,124 @@
+Algoritmo sin_titulo
+		// Definir la matriz de 10 filas x 3 columnas
+		// Fila: Producto (1 a 10)
+		// Columna 1: Código | Columna 2: Nombre | Columna 3: Cantidad
+		Dimension inventario[10, 3]
+		// Inicializar la matriz con cadenas vacías
+		Para i <- 1 Hasta 10 Hacer
+			Para j <- 1 Hasta 3 Hacer
+				inventario[i, j] <- ""
+			FinPara
+		FinPara
+		Definir opcion Como Entero
+		Definir codigoBusqueda, nuevoNombre, nuevaCantidad Como Cadena
+		Definir encontrado, registrado Como Logico
+		Definir posEncontrada, opcionSub Como Entero
+		Repetir
+			Escribir ""
+			Escribir "----- MENÚ -----"
+			Escribir "1. Registrar producto"
+			Escribir "2. Mostrar productos"
+			Escribir "3. Actualizar producto"
+			Escribir "4. Eliminar producto"
+			Escribir "5. Salir"
+			Escribir "Seleccione una opción: " Sin Saltar
+			Leer opcion
+			Escribir ""
+			Según opcion Hacer
+		1:
+			// --- 1. REGISTRAR PRODUCTO ---
+			registrado <- Falso
+			Para i <- 1 Hasta 10 Hacer
+				Si inventario[i, 1] = "" Y NO registrado Entonces
+					Escribir "--- Registrar Producto (Espacio ", i, " de 10) ---"
+					Escribir "Ingrese código del producto: " Sin Saltar
+					Leer inventario[i, 1]
+					Escribir "Ingrese nombre del producto: " Sin Saltar
+					Leer inventario[i, 2]
+					Escribir "Ingrese cantidad en existencia: " Sin Saltar
+					Leer inventario[i, 3]
+					Escribir "¡Producto registrado exitosamente!"
+					registrado <- Verdadero
+				FinSi
+			FinPara
+			
+			Si NO registrado Entonces
+				Escribir "Error: El inventario está lleno (máximo 10 productos)."
+			FinSi
+		2:
+			// --- 2. MOSTRAR PRODUCTOS ---
+			Escribir "----------------------------------------------------"
+			Escribir "LISTA DE PRODUCTOS EN INVENTARIO"
+			Escribir "----------------------------------------------------"
+			encontrado <- Falso
+			Para i <- 1 Hasta 10 Hacer
+				Si inventario[i, 1] <> "" Entonces
+					Escribir "Fila ", i, " | Código: ", inventario[i, 1], " | Nombre: ", inventario[i, 2], " | Cantidad: ", inventario[i, 3]
+					encontrado <- Verdadero
+				FinSi
+			FinPara
+			
+			Si NO encontrado Entonces
+				Escribir "No hay productos registrados en el inventario."
+			FinSi
+		3:
+			// --- 3. ACTUALIZAR PRODUCTO ---
+			Escribir "Ingrese el código del producto a actualizar: " Sin Saltar
+			Leer codigoBusqueda
+			posEncontrada <- 0
+			Para i <- 1 Hasta 10 Hacer
+				Si inventario[i, 1] = codigoBusqueda Entonces
+					posEncontrada <- i
+				FinSi
+			FinPara
+			Si posEncontrada <> 0 Entonces
+				Escribir "Producto encontrado: ", inventario[posEncontrada, 2]
+				Escribir "¿Qué desea modificar?"
+				Escribir "1. Nombre"
+				Escribir "2. Cantidad"
+				Escribir "3. Ambos"
+				Leer opcionSub
+				
+				Si opcionSub = 1 O opcionSub = 3 Entonces
+					Escribir "Ingrese nuevo nombre: " Sin Saltar
+					Leer nuevoNombre
+					inventario[posEncontrada, 2] <- nuevoNombre
+				FinSi
+				
+				Si opcionSub = 2 O opcionSub = 3 Entonces
+					Escribir "Ingrese nueva cantidad: " Sin Saltar
+					Leer nuevaCantidad
+					inventario[posEncontrada, 3] <- nuevaCantidad
+				FinSi
+				
+				Escribir "¡Producto actualizado correctamente!"
+			Sino
+				Escribir "Error: No se encontró ningún producto con el código '
+			FinSi
+		4:
+			// --- 4. ELIMINAR PRODUCTO ---
+			Escribir "Ingrese el código del producto a eliminar: " Sin Saltar
+			Leer codigoBusqueda
+			
+			posEncontrada <- 0
+			Para i <- 1 Hasta 10 Hacer
+				Si inventario[i, 1] = codigoBusqueda Entonces
+					posEncontrada <- i
+				FinSi
+			FinPara
+			Si posEncontrada <> 0 Entonces
+				// Limpiar los datos de la fila
+				inventario[posEncontrada, 1] <- ""
+				inventario[posEncontrada, 2] <- ""
+				inventario[posEncontrada, 3] <- ""
+				Escribir "¡Producto eliminado exitosamente!"
+			Sino
+				Escribir "Error: No se encontró ningún producto con el código '
+			FinSi
+		5:
+			Escribir "Saliendo del programa..."
+		De Otro Modo:
+			Escribir "Opción no válida. Intente de nuevo."
+	FinSegún
+Hasta Que opcion = 5
+FinAlgoritmo
