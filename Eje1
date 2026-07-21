@@ -1,0 +1,197 @@
+using System;
+
+namespace ParqueoVehiculos
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Matriz de 10 filas (espacios del parqueo) y 3 columnas
+            // Columna 0: Placa | Columna 1: Propietario | Columna 2: Marca
+            string[,] parqueo = new string[10, 3];
+
+            // Inicializar la matriz con cadenas vacías
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    parqueo[i, j] = "";
+                }
+            }
+
+            bool salir = false;
+
+            while (!salir)
+            {
+                Console.WriteLine("\n----- MENÚ -----");
+                Console.WriteLine("1. Registrar vehículo");
+                Console.WriteLine("2. Mostrar vehículos");
+                Console.WriteLine("3. Actualizar vehículo");
+                Console.WriteLine("4. Eliminar vehículo");
+                Console.WriteLine("5. Salir");
+                Console.Write("Seleccione una opción: ");
+
+                string opcion = Console.ReadLine();
+                Console.WriteLine();
+
+                switch (opcion)
+                {
+                    case "1":
+                        RegistrarVehiculo(parqueo);
+                        break;
+                    case "2":
+                        MostrarVehiculos(parqueo);
+                        break;
+                    case "3":
+                        ActualizarVehiculo(parqueo);
+                        break;
+                    case "4":
+                        EliminarVehiculo(parqueo);
+                        break;
+                    case "5":
+                        salir = true;
+                        Console.WriteLine("Saliendo del programa...");
+                        break;
+                    default:
+                        Console.WriteLine("Opción no válida. Intente de nuevo.");
+                        break;
+                }
+            }
+        }
+
+        // 1. Registrar vehículos hasta completar 10 espacios
+        static void RegistrarVehiculo(string[,] parqueo)
+        {
+            bool registrado = false;
+
+            for (int i = 0; i < 10; i++)
+            {
+                // Un espacio está disponible si la placa (columna 0) está vacía
+                if (string.IsNullOrEmpty(parqueo[i, 0]))
+                {
+                    Console.WriteLine($"--- Registrar Vehículo (Espacio {i + 1} de 10) ---");
+                    Console.Write("Ingrese número de placa: ");
+                    parqueo[i, 0] = Console.ReadLine();
+
+                    Console.Write("Ingrese nombre del propietario: ");
+                    parqueo[i, 1] = Console.ReadLine();
+
+                    Console.Write("Ingrese marca del vehículo: ");
+                    parqueo[i, 2] = Console.ReadLine();
+
+                    Console.WriteLine($"¡Vehículo registrado exitosamente en el espacio {i + 1}!");
+                    registrado = true;
+                    break;
+                }
+            }
+
+            if (!registrado)
+            {
+                Console.WriteLine("Error: El parqueo está lleno (máximo 10 vehículos).");
+            }
+        }
+
+        // 2. Mostrar todos los vehículos registrados
+        static void MostrarVehiculos(string[,] parqueo)
+        {
+            Console.WriteLine("----------------------------------------------------");
+            Console.WriteLine("LISTA DE VEHÍCULOS EN EL PARQUEO");
+            Console.WriteLine("----------------------------------------------------");
+
+            bool hayVehiculos = false;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (!string.IsNullOrEmpty(parqueo[i, 0]))
+                {
+                    Console.WriteLine($"Espacio {i + 1} | Placa: {parqueo[i, 0]} | Propietario: {parqueo[i, 1]} | Marca: {parqueo[i, 2]}");
+                    hayVehiculos = true;
+                }
+            }
+
+            if (!hayVehiculos)
+            {
+                Console.WriteLine("No hay vehículos registrados en el parqueo.");
+            }
+        }
+
+        // 3. Buscar mediante placa para actualizar el propietario o la marca
+        static void ActualizarVehiculo(string[,] parqueo)
+        {
+            Console.Write("Ingrese el número de placa a buscar: ");
+            string placaBusqueda = Console.ReadLine();
+
+            int pos = -1;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (parqueo[i, 0] == placaBusqueda)
+                {
+                    pos = i;
+                    break;
+                }
+            }
+
+            if (pos != -1)
+            {
+                Console.WriteLine($"Vehículo encontrado en el espacio {pos + 1}.");
+                Console.WriteLine("¿Qué dato desea actualizar?");
+                Console.WriteLine("1. Nombre del propietario");
+                Console.WriteLine("2. Marca del vehículo");
+                Console.WriteLine("3. Ambos");
+                Console.Write("Opción: ");
+                string subOpcion = Console.ReadLine();
+
+                if (subOpcion == "1" || subOpcion == "3")
+                {
+                    Console.Write("Ingrese el nuevo nombre del propietario: ");
+                    parqueo[pos, 1] = Console.ReadLine();
+                }
+
+                if (subOpcion == "2" || subOpcion == "3")
+                {
+                    Console.Write("Ingrese la nueva marca del vehículo: ");
+                    parqueo[pos, 2] = Console.ReadLine();
+                }
+
+                Console.WriteLine("¡Datos del vehículo actualizados correctamente!");
+            }
+            else
+            {
+                Console.WriteLine($"Error: No se encontró ningún vehículo con la placa '{placaBusqueda}'.");
+            }
+        }
+
+        // 4. Eliminar el registro cuando el vehículo sale definitivamente
+        static void EliminarVehiculo(string[,] parqueo)
+        {
+            Console.Write("Ingrese la placa del vehículo que sale del parqueo: ");
+            string placaBusqueda = Console.ReadLine();
+
+            int pos = -1;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (parqueo[i, 0] == placaBusqueda)
+                {
+                    pos = i;
+                    break;
+                }
+            }
+
+            if (pos != -1)
+            {
+                // Limpiar la fila liberando la posición de la matriz
+                parqueo[pos, 0] = "";
+                parqueo[pos, 1] = "";
+                parqueo[pos, 2] = "";
+
+                Console.WriteLine($"¡El vehículo con placa '{placaBusqueda}' ha salido. Espacio liberado!");
+            }
+            else
+            {
+                Console.WriteLine($"Error: No se encontró ningún vehículo con la placa '{placaBusqueda}'.");
+            }
+        }
+    }
+}
